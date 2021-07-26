@@ -1,5 +1,7 @@
 <?php
 
+require_once 'funcoes.php';
+
 $contasCorrentes = [
     '123.456.789-10' => [
       'titular' => 'Melissa',
@@ -15,39 +17,50 @@ $contasCorrentes = [
     ]
 ];
 
-// Quando explicitamos o tipo, aumentamos a segurança do código e facilitamos a procura por erros.
 
-function sacar (array $conta, float $valorASacar) : array
-{
-    if($valorASacar > $conta['saldo']) {
-        exibirMensagem('Você não pode sacar esse valor pois esse valor é maior do que tem disponivel na sua conta');
-    } else {
-        $conta['saldo'] -= $valorASacar;
-        exibirMensagem("Valor do Saque: $valorASacar, Saldo Atual: " . $conta['saldo']);
-    }
-    return $conta;
-}
-
-function depositar (array $conta, float $valorADepositar) : array
-{
-    if($valorADepositar > 0) {
-        $conta['saldo'] += $valorADepositar;
-        exibirMensagem("Valor do Deposito: $valorADepositar, Saldo Atual: " . $conta['saldo']);
-        return $conta;
-    } else {
-        exibirMensagem("Valores de deposito devem ser positivos");
-    }
-    
-}
-
-function exibirMensagem(string $mensagem) {
-    echo $mensagem . PHP_EOL;
-}
-
-$contasCorrentes['123.456.789-10'] = sacar($contasCorrentes['123.456.789-10'], 18.10);
+// $contasCorrentes['123.456.789-10'] = sacar($contasCorrentes['123.456.789-10'], 18.10);
 // $contasCorrentes['123.444.789-10'] = sacar($contasCorrentes['123.444.789-10'], 500);
-$contasCorrentes['123.444.789-10'] = depositar($contasCorrentes['123.444.789-10'], 20);
+// $contasCorrentes['123.444.789-10'] = depositar($contasCorrentes['123.444.789-10'], 20);
 
+
+// unset é uma função usada para apagar um registro do banco de dados do php
+unset ($contasCorrentes['123.444.789-10']);
+
+titularWithNameUpper($contasCorrentes['123.456.789-10']);
+
+/*foreach($contasCorrentes as $cpf => $conta) {
+    ['titular' => $titular, 'saldo' => $saldo] = $conta;
+    exibirMensagem("$cpf - $titular: $saldo");
+}*/
+
+/*echo "<ul>";
 foreach($contasCorrentes as $cpf => $conta) {
-    exibirMensagem("$cpf - {$conta['titular']}: {$conta['saldo']}");
+    exibirConta($conta);
 }
+echo "</ul>";*/
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Contas correntes aqui</h1>
+
+    <dl>
+        <?php foreach ($contasCorrentes as $cpf => $conta) { ?>
+            <dt>
+                <h3><?= $conta['titular']; ?> - <?= $cpf; ?></h3>
+            </dt>
+            <dd>
+                <h4><?= $conta['saldo']; ?></h4>
+            </dd>
+        <?php } ?>
+    </dl>
+</body>
+</html>
